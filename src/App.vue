@@ -1,13 +1,15 @@
 <template>
-  <v-ons-navigator id="app" swipeable :page-stack="pageStack" @push-page="pageStack.push($event)">
+  <v-ons-navigator id="app" swipeable :page-stack="pageStack"
+    @push-page="pageStack.push($event)"
+    @prepush="stopRecording">
   </v-ons-navigator>
 </template>
 
 <script>
-import CameraPage from "./components/CameraPage";
+import CameraPage from './components/CameraPage'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     CameraPage
   },
@@ -15,11 +17,26 @@ export default {
   data() {
     return {
       pageStack: [CameraPage]
-    };
+    }
   },
 
-  mounted() {}
-};
+  mounted() {},
+
+  methods: {
+    stopRecording(event) {
+      console.log(event)
+      if (event.currentPage == CameraPage) {
+        event.currentPage.stop = true
+      }
+    },
+
+    startRecording(event) {
+      if (event.currentPage == CameraPage) {
+        event.currentPage.stop = false
+      }
+    }
+  }
+}
 </script>
 
 <style>
@@ -31,7 +48,7 @@ body {
 }
 #app {
   height: 100%;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

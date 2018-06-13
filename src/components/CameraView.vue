@@ -6,41 +6,47 @@
 
 <script>
 export default {
-  name: "CameraView",
+  name: 'CameraView',
 
-  props: {
-    stop: {
-      type: Boolean,
-      default: false
+  computed: {
+    isRecording() {
+      return this.$store.state.isRecording
     }
   },
 
   watch: {
-    stop: function(newVal, oldVal) {
-      if (newVal) {
-        let video = this.$refs.video;
-        video.pause();
-        video.src = null;
+    isRecording(newVal, oldVal) {
+      if (this.isRecording) {
+        this.start()
+      } else {
+        this.stop()
       }
     }
   },
 
   mounted() {
-    let self = this;
-    function updateFrame() {
-      if (self.stop) return;
-      self.$emit("update-frame", self.$refs.video);
-      requestAnimationFrame(updateFrame);
-    }
+    this.start()
+  },
 
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => {
-        this.$refs.video.src = window.URL.createObjectURL(stream);
-        requestAnimationFrame(updateFrame);
-      });
+  methods: {
+    start() {
+      let self = this
+      function updateFrame() {
+        if (!self.isRecording) return
+        self.$emit('update-frame', self.$refs.video)
+        requestAnimationFrame(updateFrame)
+      }
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(stream => {
+        this.$refs.video.src = window.URL.createObjectURL(stream)
+        requestAnimationFrame(updateFrame)
+      })
+    },
+
+    stop() {
+      this.$refs.video.pause()
+    }
   }
-};
+}
 </script>
 
 <style scoped>
