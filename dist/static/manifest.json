@@ -1,6 +1,6 @@
 {
   "short_name": "QR Code Reader",
   "name": "QR Code Reader",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone"
 }
