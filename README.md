@@ -1,1 +1,0 @@
-# webrtc-qrcode-reader
